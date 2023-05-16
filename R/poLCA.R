@@ -1,3 +1,9 @@
+tryNA <- function(x){
+  x <- try(x)
+  if(inherits(x,'try-error')) return(NA)
+  x
+}
+
 poLCA <-
 function(formula,data,nclass=2,maxiter=1000,graphs=FALSE,tol=1e-10,
                 na.rm=TRUE,probs.start=NULL,nrep=1,verbose=TRUE,calc.se=TRUE) {
@@ -106,7 +112,7 @@ function(formula,data,nclass=2,maxiter=1000,graphs=FALSE,tol=1e-10,
                     } else {
                         prior <- matrix(colMeans(rgivy),nrow=N,ncol=R,byrow=TRUE)
                     }
-                    llik[iter] <- sum(log(rowSums(prior*poLCA.ylik.C(vp,y))) - log(.Machine$double.xmax))
+                    llik[iter] <- tryNA(sum(log(rowSums(prior*poLCA.ylik.C(vp,y))) - log(.Machine$double.xmax)))
                     dll <- llik[iter]-llik[iter-1]
                     if (is.na(dll)) {
                         error <- TRUE
